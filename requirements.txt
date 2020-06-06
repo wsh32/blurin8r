@@ -1,0 +1,6 @@
+asgiref==3.2.7
+Django==3.0.7
+numpy==1.18.5
+opencv-python==4.2.0.34
+pytz==2020.1
+sqlparse==0.3.1
