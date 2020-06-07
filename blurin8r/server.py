@@ -7,15 +7,14 @@ from multiprocessing import Process, Queue, Value
 
 
 app = Flask(__name__)
-settings_queue = Queue(1)
 
+settings_queue = None
+new_settings_flag = False
 settings = {
     'blur_size': 1,
     'max_face_size': -1,
     'blur_value': 50,
 }
-
-test_value = Value('d', 0.5)
 
 
 def put_new_settings(new_settings):
@@ -34,8 +33,10 @@ def update_settings():
         pass
 
 
-def start_server():
-    app.run(debug=True, threaded=False)
+def start_server(queue):
+    global settings_queue
+    settings_queue = queue
+    app.run(debug=True, threaded=False, use_reloader=False)
 
 
 @app.route('/')
@@ -45,6 +46,7 @@ def index():
 
 @app.route('/api/update', methods = ["POST"])
 def update():
+    global settings_queue
     new_values = request.form
     invalid = []
     for setting_name, value in new_values:
@@ -55,7 +57,7 @@ def update():
                 invalid.append(setting_name)
         else:
             invalid.append(setting_name)
-    put_new_settings(settings)
+    settings_queue.put(settings)
 
     if len(invalid) == 0:
         return jsonify({'OK': True})
@@ -65,12 +67,12 @@ def update():
 
 @app.route('/api/test')
 def test():
+    global settings_queue
     settings['blur_size'] = 2
-    put_new_settings(settings)
-    test_value.value = 100
+    settings_queue.put(settings)
     return "OK"
 
 
 if __name__ == '__main__':
-    start_server()
+    start_server(Queue(1))
 

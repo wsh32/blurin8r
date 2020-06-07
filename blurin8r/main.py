@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import pyfakewebcam # generating fake webcam on top of v4l2loopback-utils
 
-from multiprocessing import Process
+from multiprocessing import Process, Queue
 
 
 DEBUG = True
@@ -66,7 +66,8 @@ def main(args, net, queue):
         fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height) # setup fake
 
         while True:
-            # print(server.test_value.value)
+            if queue.full():
+                server.settings = queue.get()
             ret, img = cap.read()
             blurred_img = blur_frame(img, net, server.settings)
             blurred_img_rgb = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2RGB) # switch BGR2RGB
@@ -97,10 +98,12 @@ if __name__ == '__main__':
 
     net = process.generate_yolo_net(args.cfg, args.weights)
 
-    server_process = Process(target=server.start_server)
+    settings_queue = Queue(1)
+
+    server_process = Process(target=server.start_server, args=(settings_queue, ))
     server_process.start()
 
-    main_process = Process(target=main, args=(args, net, server.settings_queue, ))
+    main_process = Process(target=main, args=(args, net, settings_queue))
     main_process.start()
     main_process.join()
 
