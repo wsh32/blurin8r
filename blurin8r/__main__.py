@@ -7,6 +7,9 @@ import numpy as np
 import pyfakewebcam # generating fake webcam on top of v4l2loopback-utils
 import sys
 
+
+DEBUG = True
+
 # need to run in shell
 # sudo apt install v4l2loopback-dkms
 # sudo modprobe -r v4l2loopback
@@ -72,11 +75,11 @@ if __name__ == '__main__':
     else:
         # run on video by default
         cap = cv2.VideoCapture(args.cam)
-        # cap = cv2.VideoCapture('/dev/video0')
         height, width = 720, 1280
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         cap.set(cv2.CAP_PROP_FPS, 60)
+
         fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height) # setup fake
 
         while True:
@@ -84,10 +87,11 @@ if __name__ == '__main__':
             blurred_img = blur_frame(img, net, server.settings)
             blurred_img_rgb = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2RGB) # switch BGR2RGB
             fake.schedule_frame(blurred_img_rgb)
-            out = np.hstack((img, blurred_img))
-            cv2.imshow('out', out)
-            if cv2.waitKey(1) & 0xff == ord('q'):
-                break
+            if DEBUG:
+                out = np.hstack((img, blurred_img))
+                cv2.imshow('out', out)
+                if cv2.waitKey(1) & 0xff == ord('q'):
+                    break
 
         cap.release()
     cv2.destroyAllWindows()
