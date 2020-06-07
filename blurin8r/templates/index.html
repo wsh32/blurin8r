@@ -8,24 +8,31 @@
         <style>
 
             #header1{
-                font-size: 89px;
+                margin: 40px 100px 10px 100px;
+                font-size: 95px;
                 font-family: monospace;
                 font-weight: bold;
             }
             #tagline{
-                font-size: 50px;
+                margin: 20px 100px 20px 100px;
+                font-family: monospace;
+                font-weight: bold;
+                font-size:35px;
+            }
+            
+            foot{
+                font-size: 25px;
                 font-family: monospace;
                 font-weight: bold;
             }
 
            .btn {
-            margin: 20px 100px 20px 100px;
+            margin: 20px 100px 40px 100px;
             border-radius: 25px;
             border: none;
             background-color: inherit;
             padding: 14px 28px;
-            font-size: 76px;
-            cursor: pointer;
+            font-size: 65px;
             display: inline-block;
             font-family: monospace;
             font-weight: bold;
@@ -43,12 +50,15 @@
             .info {
             background: #2196F3;
             color: white;
+            padding: 14px 67px;
             }
 
             /* Orange */
             .warning {
             background: #ff9800;
             color: white;
+            padding: 14px 67px;
+            
             }
 
             .inputValues{
@@ -63,7 +73,7 @@
 
             *::after,
             *::before {
-            margin: 20px 50px 20px 50px;
+            margin: 20px 100px 40px 100px;
             padding: 0;
             box-sizing: inherit;
             font-size: 62,5%;
@@ -71,36 +81,51 @@
 
             body {
             background: #0f2027; /* fallback for old browsers */
-            background: linear-gradient(to right,#2c5364, #203a43, #0f2027);
+            background: linear-gradient(to right,#424142, #110f11, #1e2427);
             display: flex;
             justify-content: center;
-            align-items: center;    
+            align-items: center;
             color: #fff;
             }
 
             .form__label {
-            font-family: 'Roboto', sans-serif;
+            font-family: monospace;
             font-size: 1.2rem;
-            margin-left: 2rem;
-            margin-top: 0.7rem;
-            display: block;
-            transition: all 0.3s;
-            transform: translateY(0rem);
+            margin-top: 0.2rem;
+            margin-right:90px;
+            transition: all 0.2s;
+            transform: translateY(3rem);
+            font-weight: bold;
             }
 
             .form__input {
-            font-family: 'Roboto', sans-serif;
+            margin: 40px 90px 40px 90;
+            font-family: monospace;
             color: #333;
             font-size: 1.2rem;
-                margin: 0 auto;
+                margin: 20 px;
             padding: 1.5rem 2rem;
             border-radius: 0.2rem;
             background-color: rgb(255, 255, 255);
             border: none;
-            width: 90%;
-            display: block;
-            border-bottom: 0.3rem solid transparent;
             transition: all 0.3s;
+            font-weight: bold;
+            white-space: nowrap;
+            display:inline;
+            }
+
+            .form_group{
+                display: inline-block;
+            }
+            #BAmount{
+                display: block;
+            }
+            
+            #BSize{
+                display: block;
+            }
+            #FSize{
+                display: block;
             }
 
             .form__input:placeholder-shown + .form__label {
@@ -108,10 +133,11 @@
             visibility: hidden;
             -webkit-transform: translateY(-4rem);
             transform: translateY(-4rem);
+            font-weight: bold;
             }
 
             .buttons{
-                margin:100px;
+                margin: 20px 100px 20px 100px;
                 height:45px; 
                 font-size:25pt; 
                 font-family: monospace;
@@ -131,22 +157,21 @@
                 
 			<main>
                 
-                
-                <button class="btn success">Blur Amount</button>
-                <button class="btn info">Blur Size</button>
-                <button class="btn warning">Face Size</button>
+                <p class="btn success">Blur Amount</p>
+                <p class="btn info">Blur Size</p>
+                <p class="btn warning">Face Size</p>
                 
                 <form id = "settings">
                         <div class="form__group">
 
-                            <input type="text" class="form__input" id="BAmount" placeholder="Blur amount 1- 5" required="" />
-                            <label for="BAmount" class="form__label">Blur amount 1- 5</label>
+                            <input type="text" class="form__input" id="BAmount" placeholder="Blur amount (default: 50)" required="" />
+                            <label for="BAmount" class="form__label">Blur amount (default: 50)</label> <br>
 
-                            <input type="text" class="form__input" id="BSize" placeholder="Blur size 1 - 4" required="" />
-                            <label for="BSize" class="form__label">Blur size 1 - 4</label>
+                            <input type="text" class="form__input" id="BSize" placeholder="Blur size (default: 1)" required="" />
+                            <label for="BSize" class="form__label">Blur size (default: 1)</label> <br>
 
-                            <input type="text" class="form__input" id="FSize" placeholder="Face Size 1 - 4" required="" />
-                            <label for="FSize" class="form__label">Face Size 1 - 4</label>
+                            <input type="text" class="form__input" id="FSize" placeholder="Face Size (0 - 1, default: -1)" required="" />
+                            <label for="FSize" class="form__label">Face Size (0 - 1, default: -1)</label> <br>
                         </div>
 
                         <br><br>
@@ -158,30 +183,38 @@
                             
             </main>
             <br>
-            <br>
-            <br>
-            <br>
+            
 
             <foot>
-                Adi Emily Wesley
-            </foot>
+                Made by Adi Ramachandra, Emily Wan and Wesley Soo-Hoo
+            </foot><br><br><br>
 
             <script>
+                
                 $(document).ready(function(){
                     $('#settings').on('submit', function loadDoc(e) {
                         e.preventDefault();
                         e.stopPropagation();
+                        var blur_size = document.getElementById("BSize").value;
+                        var max_face_size = document.getElementById("FSize").value;
+                        var blur_value = document.getElementById("BAmount").value;
+
                         var xhttp = new XMLHttpRequest();
                         xhttp.onreadystatechange = function() {
-                            document.getElementById("demo").innerHTML = this.status;
-                            if (this.readyState == 4 && this.status == 200) {
                             
+                            if (this.readyState == 4 && this.status == 200) {
+                                document.getElementById("demo").innerHTML = this.status;
+                            }else{
+                                console.log("You Suck")
+                                document.getElementById("demo").innerHTML = this.status;
                             }
                         };
-                        xhttp.open("POST", "120.0.0.1:5000", true);
-                        xhttp.send();
+                        xhttp.open("POST", "/api/update", true);
+                        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xhttp.send(`blur_size=${blur_size}&max_face_size=${max_face_size}&blur_value=${blur_value}`)
                     })
-                });
+                })
+            
             </script>
         </body>
         </center>
