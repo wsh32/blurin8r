@@ -3,7 +3,8 @@
 	<head>
         <title>Blurin8r</title>
         
-        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
         <style>
 
             #header1{
@@ -51,11 +52,11 @@
             }
 
             .inputValues{
-                margin: 20px 50px 20px 50px;
-                font-size: 45px;
-                font-family: monospace;
-                font-weight: bold;
-                height:45px; 
+            margin: 20px 50px 20px 50px;
+            font-size: 45px;
+            font-family: monospace;
+            font-weight: bold;
+            height:45px; 
                 
                 
             }
@@ -119,7 +120,7 @@
       
         </style>
 
-	</head>
+    </head>
         <center>
 		<body>
             <header>
@@ -135,7 +136,7 @@
                 <button class="btn info">Blur Size</button>
                 <button class="btn warning">Face Size</button>
                 
-                <form>
+                <form id = "settings">
                         <div class="form__group">
 
                             <input type="text" class="form__input" id="BAmount" placeholder="Blur amount 1- 5" required="" />
@@ -151,10 +152,10 @@
                         <br><br>
 
                             <button type="reset" value="Reset" class = "buttons">Reset</button>
-                            
+                            <button type="submit" value= "Submit" class=" buttons">Submit</button>
+                            <br><p id="demo"></p>
                 </form>
-                            <button type="submit" value= "Submit" onClick="(e)=>{loadDoc(e)}" class=" buttons">Submit</button>
-                                                        <br><p id="demo"></p>
+                            
             </main>
             <br>
             <br>
@@ -166,24 +167,22 @@
             </foot>
 
             <script>
-
-                function test(){
-                    print("Hello World");
-                }
-                
-                function loadDoc(e) {
-                    e.preventDefault();
-                    console.log();
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function() {
-                        if (this.readyState == 4 && this.status == 200) {
-                        document.getElementById("demo").innerHTML = this.responseText;
-                        }
-                    };
-                    xhttp.open("POST", "120.0.0.1:5000", true);
-                    xhttp.send();
-                </script>
-
+                $(document).ready(function(){
+                    $('#settings').on('submit', function loadDoc(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function() {
+                            document.getElementById("demo").innerHTML = this.status;
+                            if (this.readyState == 4 && this.status == 200) {
+                            
+                            }
+                        };
+                        xhttp.open("POST", "120.0.0.1:5000", true);
+                        xhttp.send();
+                    })
+                });
+            </script>
         </body>
         </center>
 </html>
