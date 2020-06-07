@@ -67,15 +67,28 @@ def find_faces_yolo(img, net, conf_threshold=CONF_THRESHOLD, nms_threshold=NMS_T
     return final_boxes
 
 
-def blur_faces(img, faces, max_area=None, debug=False):
-    blur = cv2.blur(img, (50, 50))
+def blur_faces(img, faces, blur_value=50, max_area=None, blur_size=1, debug=False):
+    blur = cv2.blur(img, (blur_value, blur_value))
 
     mask = np.zeros((np.size(img, 0), np.size(img, 1), np.size(img, 2)), dtype=np.uint8)
     for (x, y, w, h) in faces:
-        if max_area is not None:
-            if (w * h) > max_area:
+        if max_area is not None and max_area > 0:
+            if (w * h) > max_area * np.size(img, 0) * np.size(img, 1):
                 continue
-        mask = cv2.rectangle(mask, (x, y), (x+w, y+h), (255, 255, 255), -1)
+
+        center_x = x + w/2
+        center_y = y + h/2
+
+        scaled_w = w * blur_size
+        scaled_h = h * blur_size
+
+        x1 = center_x - scaled_w / 2
+        x2 = center_x + scaled_w / 2
+
+        y1 = center_y - scaled_h / 2
+        y2 = center_y + scaled_h / 2
+
+        mask = cv2.rectangle(mask, (int(x1), int(y1)), (int(x2), int(y2)), (255, 255, 255), -1)
 
     out = np.where(mask==(255, 255, 255), blur, img)
     if debug:
