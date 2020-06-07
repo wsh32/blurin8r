@@ -22,15 +22,19 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/api/update')
+@app.route('/api/update', methods = ["POST"])
 def update():
     new_values = request.get_json()
     invalid = []
-    for setting_name in new_values.keys():
-        if setting_name in settings.keys():
-            settings[setting_name] = new_values[setting_name]
-        else:
-            invalid.append(setting_name)
+    print(request.form)
+    try:
+        for setting_name in new_values.keys():
+            if setting_name in settings.keys():
+                settings[setting_name] = new_values[setting_name]
+            else:
+                invalid.append(setting_name)
+    except:
+        print("BAD VALUES")
 
     if len(invalid) == 0:
         return jsonify({'OK': True})

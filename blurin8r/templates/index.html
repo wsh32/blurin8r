@@ -167,21 +167,31 @@
             </foot>
 
             <script>
+                
                 $(document).ready(function(){
                     $('#settings').on('submit', function loadDoc(e) {
                         e.preventDefault();
                         e.stopPropagation();
+                        var blur_size = document.getElementById("BAmount").value;
+                        var max_face_size = document.getElementById("BSize").value;
+                        var blur_value = document.getElementById("FSize").value;
+
                         var xhttp = new XMLHttpRequest();
                         xhttp.onreadystatechange = function() {
-                            document.getElementById("demo").innerHTML = this.status;
-                            if (this.readyState == 4 && this.status == 200) {
                             
+                            if (this.readyState == 4 && this.status == 200) {
+                                document.getElementById("demo").innerHTML = this.status;
+                            }else{
+                                console.log("You Suck")
+                                document.getElementById("demo").innerHTML = this.status;
                             }
                         };
-                        xhttp.open("POST", "120.0.0.1:5000", true);
-                        xhttp.send();
+                        xhttp.open("POST", "/api/update", true);
+                        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xhttp.send(`blur_size=${blur_size}&max_face_size=${max_face_size}&blur_value=${blur_value}`)
                     })
-                });
+                })
+            
             </script>
         </body>
         </center>
