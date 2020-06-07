@@ -8,9 +8,10 @@ app = Flask(__name__)
 
 settings = {
     'blur_size': 1,
-    'max_face_size': 0.25,
+    'max_face_size': -1,
     'blur_value': 50,
 }
+
 
 def start_server():
     app.run(debug=True)
@@ -19,6 +20,7 @@ def start_server():
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/api/update')
 def update():
