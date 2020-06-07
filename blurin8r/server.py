@@ -45,12 +45,14 @@ def index():
 
 @app.route('/api/update', methods = ["POST"])
 def update():
-    new_values = request.get_json()
+    new_values = request.form
     invalid = []
-    print(request.form)
-    for setting_name in new_values.keys():
+    for setting_name, value in new_values:
         if setting_name in settings.keys():
-            settings[setting_name] = new_values[setting_name]
+            try:
+                settings[setting_name] = float(value)
+            except:
+                invalid.append(setting_name)
         else:
             invalid.append(setting_name)
     put_new_settings(settings)
