@@ -17,10 +17,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     cap = cv2.VideoCapture(2)
-
+    net = process.generate_yolo_net(args.cfg, args.weights)
     while True:
         ret, img = cap.read()
-        net = process.generate_yolo_net(args.cfg, args.weights)
         faces = process.find_faces_yolo(img, net)
 
 
