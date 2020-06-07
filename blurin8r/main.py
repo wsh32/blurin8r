@@ -91,4 +91,3 @@ if __name__ == '__main__':
     main_process = Process(target=main, args=(args, net, settings_queue, args.debug))
     main_process.start()
     main_process.join()
-
