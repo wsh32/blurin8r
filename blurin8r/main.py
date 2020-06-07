@@ -5,7 +5,8 @@ import argparse
 import cv2
 import numpy as np
 import pyfakewebcam # generating fake webcam on top of v4l2loopback-utils
-import sys
+
+from multiprocessing import Process
 
 
 DEBUG = True
@@ -41,25 +42,7 @@ def blur_frame(img, net, settings):
     return blurred_img
 
 
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Blur out faces')
-    parser.add_argument('--img', type=str, help='File to blur')
-    parser.add_argument('--cam', type=int, help='Camera capture', default=0)
-    parser.add_argument('--classifier', type=str, help='Classifier xml file',
-                        default='./cascades/haarcascade_frontalface_default.xml')
-    parser.add_argument('--out', type=str, help='Output file')
-    parser.add_argument('--cfg', type=str, help='cfg file',
-                        default='./cfg/face-yolov3-tiny.cfg')
-    parser.add_argument('--weights', type=str, help='weights file',
-                        default='./model-weights/face-yolov3-tiny_41000.weights')
-
-    args = parser.parse_args()
-
-    net = process.generate_yolo_net(args.cfg, args.weights)
-
-    server.start_server()
-
+def main(args, net, queue):
     if args.img is not None:
         # If img is specified run on image
         img = cv2.imread(args.img)
@@ -83,6 +66,7 @@ if __name__ == '__main__':
         fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height) # setup fake
 
         while True:
+            # print(server.test_value.value)
             ret, img = cap.read()
             blurred_img = blur_frame(img, net, server.settings)
             blurred_img_rgb = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2RGB) # switch BGR2RGB
@@ -97,4 +81,26 @@ if __name__ == '__main__':
     cv2.destroyAllWindows()
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Blur out faces')
+    parser.add_argument('--img', type=str, help='File to blur')
+    parser.add_argument('--cam', type=int, help='Camera capture', default=0)
+    parser.add_argument('--classifier', type=str, help='Classifier xml file',
+                        default='./cascades/haarcascade_frontalface_default.xml')
+    parser.add_argument('--out', type=str, help='Output file')
+    parser.add_argument('--cfg', type=str, help='cfg file',
+                        default='./cfg/face-yolov3-tiny.cfg')
+    parser.add_argument('--weights', type=str, help='weights file',
+                        default='./model-weights/face-yolov3-tiny_41000.weights')
+
+    args = parser.parse_args()
+
+    net = process.generate_yolo_net(args.cfg, args.weights)
+
+    server_process = Process(target=server.start_server)
+    server_process.start()
+
+    main_process = Process(target=main, args=(args, net, server.settings_queue, ))
+    main_process.start()
+    main_process.join()
 

@@ -3,8 +3,11 @@ from flask import render_template
 from flask import jsonify
 from flask import request
 
+from multiprocessing import Process, Queue, Value
+
 
 app = Flask(__name__)
+settings_queue = Queue(1)
 
 settings = {
     'blur_size': 1,
@@ -12,9 +15,27 @@ settings = {
     'blur_value': 50,
 }
 
+test_value = Value('d', 0.5)
+
+
+def put_new_settings(new_settings):
+    if settings_queue.full():
+        try:
+            settings_queue.get_nowait()
+        except:
+            pass
+    settings_queue.put(new_settings)
+
+
+def update_settings():
+    try:
+        settings = settings_queue.get_nowait()
+    except:
+        pass
+
 
 def start_server():
-    app.run(debug=True)
+    app.run(debug=True, threaded=False)
 
 
 @app.route('/')
@@ -27,19 +48,25 @@ def update():
     new_values = request.get_json()
     invalid = []
     print(request.form)
-    try:
-        for setting_name in new_values.keys():
-            if setting_name in settings.keys():
-                settings[setting_name] = new_values[setting_name]
-            else:
-                invalid.append(setting_name)
-    except:
-        print("BAD VALUES")
+    for setting_name in new_values.keys():
+        if setting_name in settings.keys():
+            settings[setting_name] = new_values[setting_name]
+        else:
+            invalid.append(setting_name)
+    put_new_settings(settings)
 
     if len(invalid) == 0:
         return jsonify({'OK': True})
     else:
         return jsonify({'OK': False, 'INVALID': invalid})
+
+
+@app.route('/api/test')
+def test():
+    settings['blur_size'] = 2
+    put_new_settings(settings)
+    test_value.value = 100
+    return "OK"
 
 
 if __name__ == '__main__':
