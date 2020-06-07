@@ -5,87 +5,184 @@
         
         
         <style>
+
+            #header1{
+                font-size: 89px;
+                font-family: monospace;
+                font-weight: bold;
+            }
+            #tagline{
+                font-size: 50px;
+                font-family: monospace;
+                font-weight: bold;
+            }
+
            .btn {
+            margin: 20px 100px 20px 100px;
+            border-radius: 25px;
             border: none;
             background-color: inherit;
             padding: 14px 28px;
             font-size: 76px;
             cursor: pointer;
             display: inline-block;
+            font-family: monospace;
+            font-weight: bold;
             }
 
             /* Green */
             .success {
-            color: green;
-            }
-
-            .success:hover {
             background-color: #4CAF50;
             color: white;
+            
             }
-
+            
             /* Blue */
-            .info {
-            color: dodgerblue;
-            }
 
-            .info:hover {
+            .info {
             background: #2196F3;
             color: white;
             }
 
             /* Orange */
             .warning {
-            color: orange;
-            }
-
-            .warning:hover {
             background: #ff9800;
             color: white;
             }
 
-            /* Red */
-            .danger {
-            color: red;
+            .inputValues{
+                margin: 20px 50px 20px 50px;
+                font-size: 45px;
+                font-family: monospace;
+                font-weight: bold;
+                height:45px; 
+                
+                
             }
 
-            .danger:hover {
-            background: #f44336;
-            color: white;
+            *::after,
+            *::before {
+            margin: 20px 50px 20px 50px;
+            padding: 0;
+            box-sizing: inherit;
+            font-size: 62,5%;
             }
 
-            /* Gray */
-            .default {
-            color: black;
+            body {
+            background: #0f2027; /* fallback for old browsers */
+            background: linear-gradient(to right,#2c5364, #203a43, #0f2027);
+            display: flex;
+            justify-content: center;
+            align-items: center;    
+            color: #fff;
             }
 
-            .default:hover {
-            background: #e7e7e7;
+            .form__label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            margin-left: 2rem;
+            margin-top: 0.7rem;
+            display: block;
+            transition: all 0.3s;
+            transform: translateY(0rem);
             }
+
+            .form__input {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            font-size: 1.2rem;
+                margin: 0 auto;
+            padding: 1.5rem 2rem;
+            border-radius: 0.2rem;
+            background-color: rgb(255, 255, 255);
+            border: none;
+            width: 90%;
+            display: block;
+            border-bottom: 0.3rem solid transparent;
+            transition: all 0.3s;
+            }
+
+            .form__input:placeholder-shown + .form__label {
+            opacity: 0;
+            visibility: hidden;
+            -webkit-transform: translateY(-4rem);
+            transform: translateY(-4rem);
+            }
+
+            .buttons{
+                margin:100px;
+                height:45px; 
+                font-size:25pt; 
+                font-family: monospace;
+                font-weight: bold;
+            }
+      
         </style>
 
 	</head>
         <center>
 		<body>
             <header>
-                <h1>BLURIN8R</h1><br>
-                <p>Lorem ipsum hello hello hello hello hello  hello aaaaaaaaaaaaaaaaaaaaaaaaa</p><br>
+                <h1 id="header1">BLURIN8R</h1><br>
+                <p id= "tagline">Protest in Peace<br>
+                Your face is Blurred with us :)</p><br>
             </header>
-
-			<main>
-                <h2>testing</h2>
                 
-                <button class="btn success">Success</button>
-                <button class="btn info">Info</button>
-                <button class="btn warning">Warning</button>
-                <button class="btn danger">Danger</button>
-                <button class="btn default">Default</button>
+			<main>
+                
+                
+                <button class="btn success">Blur Amount</button>
+                <button class="btn info">Blur Size</button>
+                <button class="btn warning">Face Size</button>
+                
+                <form>
+                        <div class="form__group">
 
+                            <input type="text" class="form__input" id="BAmount" placeholder="Blur amount 1- 5" required="" />
+                            <label for="BAmount" class="form__label">Blur amount 1- 5</label>
+
+                            <input type="text" class="form__input" id="BSize" placeholder="Blur size 1 - 4" required="" />
+                            <label for="BSize" class="form__label">Blur size 1 - 4</label>
+
+                            <input type="text" class="form__input" id="FSize" placeholder="Face Size 1 - 4" required="" />
+                            <label for="FSize" class="form__label">Face Size 1 - 4</label>
+                        </div>
+
+                        <br><br>
+
+                            <button type="reset" value="Reset" class = "buttons">Reset</button>
+                            
+                </form>
+                            <button type="submit" value= "Submit" onClick="(e)=>{loadDoc(e)}" class=" buttons">Submit</button>
+                                                        <br><p id="demo"></p>
             </main>
-            
+            <br>
+            <br>
+            <br>
+            <br>
+
             <foot>
                 Adi Emily Wesley
             </foot>
+
+            <script>
+
+                function test(){
+                    print("Hello World");
+                }
+                
+                function loadDoc(e) {
+                    e.preventDefault();
+                    console.log();
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("demo").innerHTML = this.responseText;
+                        }
+                    };
+                    xhttp.open("POST", "120.0.0.1:5000", true);
+                    xhttp.send();
+                </script>
 
         </body>
         </center>
