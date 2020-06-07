@@ -8,12 +8,18 @@
         <style>
 
             #header1{
-                font-size: 89px;
+                font-size: 95px;
                 font-family: monospace;
                 font-weight: bold;
             }
             #tagline{
                 font-size: 50px;
+                font-family: monospace;
+                font-weight: bold;
+            }
+            
+            foot{
+                font-size: 35px;
                 font-family: monospace;
                 font-weight: bold;
             }
@@ -25,7 +31,6 @@
             background-color: inherit;
             padding: 14px 28px;
             font-size: 76px;
-            cursor: pointer;
             display: inline-block;
             font-family: monospace;
             font-weight: bold;
@@ -71,25 +76,25 @@
 
             body {
             background: #0f2027; /* fallback for old browsers */
-            background: linear-gradient(to right,#2c5364, #203a43, #0f2027);
+            background: linear-gradient(to right,#e90075, #960ea8, #0d83b6);
             display: flex;
             justify-content: center;
-            align-items: center;    
+            align-items: center;
             color: #fff;
             }
 
             .form__label {
-            font-family: 'Roboto', sans-serif;
+            font-family: monospace;
             font-size: 1.2rem;
-            margin-left: 2rem;
-            margin-top: 0.7rem;
-            display: block;
+            margin-top: 0.2rem;
+            display: inline-block;
             transition: all 0.3s;
             transform: translateY(0rem);
+            font-weight: bold;
             }
 
             .form__input {
-            font-family: 'Roboto', sans-serif;
+            font-family: monospace;
             color: #333;
             font-size: 1.2rem;
                 margin: 0 auto;
@@ -97,10 +102,9 @@
             border-radius: 0.2rem;
             background-color: rgb(255, 255, 255);
             border: none;
-            width: 90%;
-            display: block;
-            border-bottom: 0.3rem solid transparent;
             transition: all 0.3s;
+            font-weight: bold;
+            display: block;
             }
 
             .form__input:placeholder-shown + .form__label {
@@ -108,6 +112,7 @@
             visibility: hidden;
             -webkit-transform: translateY(-4rem);
             transform: translateY(-4rem);
+            font-weight: bold;
             }
 
             .buttons{
@@ -131,22 +136,21 @@
                 
 			<main>
                 
-                
-                <button class="btn success">Blur Amount</button>
-                <button class="btn info">Blur Size</button>
-                <button class="btn warning">Face Size</button>
+                <p class="btn success">Blur Amount</p>
+                <p class="btn info">Blur Size</p>
+                <p class="btn warning">Face Size</p>
                 
                 <form id = "settings">
                         <div class="form__group">
 
                             <input type="text" class="form__input" id="BAmount" placeholder="Blur amount 1- 5" required="" />
-                            <label for="BAmount" class="form__label">Blur amount 1- 5</label>
+                            <label for="BAmount" class="form__label">Blur amount 1- 5</label> <br>
 
                             <input type="text" class="form__input" id="BSize" placeholder="Blur size 1 - 4" required="" />
-                            <label for="BSize" class="form__label">Blur size 1 - 4</label>
+                            <label for="BSize" class="form__label">Blur size 1 - 4</label> <br>
 
                             <input type="text" class="form__input" id="FSize" placeholder="Face Size 1 - 4" required="" />
-                            <label for="FSize" class="form__label">Face Size 1 - 4</label>
+                            <label for="FSize" class="form__label">Face Size 1 - 4</label> <br>
                         </div>
 
                         <br><br>
@@ -158,13 +162,11 @@
                             
             </main>
             <br>
-            <br>
-            <br>
-            <br>
+            
 
             <foot>
-                Adi Emily Wesley
-            </foot>
+                Made by Adi Ramachandra, Emily Wan and Wesley Soo-Hoo
+            </foot><br><br><br>
 
             <script>
                 
@@ -172,9 +174,9 @@
                     $('#settings').on('submit', function loadDoc(e) {
                         e.preventDefault();
                         e.stopPropagation();
-                        var blur_size = document.getElementById("BAmount").value;
-                        var max_face_size = document.getElementById("BSize").value;
-                        var blur_value = document.getElementById("FSize").value;
+                        var blur_size = document.getElementById("BSize").value;
+                        var max_face_size = document.getElementById("FSize").value;
+                        var blur_value = document.getElementById("BAmount").value;
 
                         var xhttp = new XMLHttpRequest();
                         xhttp.onreadystatechange = function() {
