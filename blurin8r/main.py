@@ -5,30 +5,9 @@ import argparse
 import cv2
 import numpy as np
 import pyfakewebcam # generating fake webcam on top of v4l2loopback-utils
+import os
 
 from multiprocessing import Process, Queue
-
-
-DEBUG = True
-
-# need to run in shell
-# sudo apt install v4l2loopback-dkms
-# sudo modprobe -r v4l2loopback
-# sudo modprobe v4l2loopback devices=1 video_nr=20 card_label="v4l2loopback" exclusive_caps=1
-
-# TO BUILD DOCKER:
-
-# docker build -t blurin8r .
-# TO RUN DOCKER:
-
-# # start the camera, note that we need to pass through video devices,
-# # and we want our user ID and group to have permission to them
-# # you may need to `sudo groupadd $USER video`
-# docker run -d \
-#   --name=fakecam \
-#   -u "$(id -u):$(getent group video | cut -d: -f3)" \
-#   $(find /dev -name 'video*' -printf "--device %p ") \
-#   fakecam
 
 
 def blur_frame(img, net, settings):
@@ -42,7 +21,7 @@ def blur_frame(img, net, settings):
     return blurred_img
 
 
-def main(args, net, queue):
+def main(args, net, queue, debug=False):
     if args.img is not None:
         # If img is specified run on image
         img = cv2.imread(args.img)
@@ -63,7 +42,12 @@ def main(args, net, queue):
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         cap.set(cv2.CAP_PROP_FPS, 60)
 
-        fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height) # setup fake
+        try:
+            fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height) # setup fake
+        except FileNotFoundError:
+            # Need to initialize
+            os.system('./setup.sh')
+            fake = pyfakewebcam.FakeWebcam('/dev/video20', width, height) # setup fake
 
         while True:
             if queue.full():
@@ -72,7 +56,7 @@ def main(args, net, queue):
             blurred_img = blur_frame(img, net, server.settings)
             blurred_img_rgb = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2RGB) # switch BGR2RGB
             fake.schedule_frame(blurred_img_rgb)
-            if DEBUG:
+            if debug:
                 out = np.hstack((img, blurred_img))
                 cv2.imshow('out', out)
                 if cv2.waitKey(1) & 0xff == ord('q'):
@@ -93,6 +77,7 @@ if __name__ == '__main__':
                         default='./cfg/face-yolov3-tiny.cfg')
     parser.add_argument('--weights', type=str, help='weights file',
                         default='./model-weights/face-yolov3-tiny_41000.weights')
+    parser.add_argument('--debug', help='Enable debug mode', action='store_true')
 
     args = parser.parse_args()
 
@@ -103,7 +88,7 @@ if __name__ == '__main__':
     server_process = Process(target=server.start_server, args=(settings_queue, ))
     server_process.start()
 
-    main_process = Process(target=main, args=(args, net, settings_queue))
+    main_process = Process(target=main, args=(args, net, settings_queue, args.debug))
     main_process.start()
     main_process.join()
 
