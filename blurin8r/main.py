@@ -37,7 +37,7 @@ def blur_frame(img, net, settings):
 
     blurred_img = process.blur_faces(img, faces,
                                      max_area=settings['max_face_size'],
-                                     blur_value=settings['blur_value'],
+                                     blur_value=max(int(settings['blur_value']), 0),
                                      blur_size=settings['blur_size'])
     return blurred_img
 

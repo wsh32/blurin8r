@@ -49,8 +49,9 @@ def update():
     global settings_queue
     new_values = request.form
     invalid = []
-    for setting_name, value in new_values:
+    for setting_name in new_values:
         if setting_name in settings.keys():
+            value = new_values[setting_name]
             try:
                 settings[setting_name] = float(value)
             except:
