@@ -8,29 +8,31 @@
         <style>
 
             #header1{
+                margin: 40px 100px 10px 100px;
                 font-size: 95px;
                 font-family: monospace;
                 font-weight: bold;
             }
             #tagline{
-                font-size: 50px;
+                margin: 20px 100px 20px 100px;
                 font-family: monospace;
                 font-weight: bold;
+                font-size:35px;
             }
             
             foot{
-                font-size: 35px;
+                font-size: 25px;
                 font-family: monospace;
                 font-weight: bold;
             }
 
            .btn {
-            margin: 20px 100px 20px 100px;
+            margin: 20px 100px 40px 100px;
             border-radius: 25px;
             border: none;
             background-color: inherit;
             padding: 14px 28px;
-            font-size: 76px;
+            font-size: 65px;
             display: inline-block;
             font-family: monospace;
             font-weight: bold;
@@ -48,12 +50,15 @@
             .info {
             background: #2196F3;
             color: white;
+            padding: 14px 67px;
             }
 
             /* Orange */
             .warning {
             background: #ff9800;
             color: white;
+            padding: 14px 67px;
+            
             }
 
             .inputValues{
@@ -68,7 +73,7 @@
 
             *::after,
             *::before {
-            margin: 20px 50px 20px 50px;
+            margin: 20px 100px 40px 100px;
             padding: 0;
             box-sizing: inherit;
             font-size: 62,5%;
@@ -76,7 +81,7 @@
 
             body {
             background: #0f2027; /* fallback for old browsers */
-            background: linear-gradient(to right,#e90075, #960ea8, #0d83b6);
+            background: linear-gradient(to right,#424142, #110f11, #1e2427);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -87,24 +92,40 @@
             font-family: monospace;
             font-size: 1.2rem;
             margin-top: 0.2rem;
-            display: inline-block;
-            transition: all 0.3s;
-            transform: translateY(0rem);
+            margin-right:90px;
+            transition: all 0.2s;
+            transform: translateY(3rem);
             font-weight: bold;
             }
 
             .form__input {
+            margin: 40px 90px 40px 90;
             font-family: monospace;
             color: #333;
             font-size: 1.2rem;
-                margin: 0 auto;
+                margin: 20 px;
             padding: 1.5rem 2rem;
             border-radius: 0.2rem;
             background-color: rgb(255, 255, 255);
             border: none;
             transition: all 0.3s;
             font-weight: bold;
-            display: block;
+            white-space: nowrap;
+            display:inline;
+            }
+
+            .form_group{
+                display: inline-block;
+            }
+            #BAmount{
+                display: block;
+            }
+            
+            #BSize{
+                display: block;
+            }
+            #FSize{
+                display: block;
             }
 
             .form__input:placeholder-shown + .form__label {
@@ -116,7 +137,7 @@
             }
 
             .buttons{
-                margin:100px;
+                margin: 20px 100px 20px 100px;
                 height:45px; 
                 font-size:25pt; 
                 font-family: monospace;
