@@ -10,8 +10,8 @@ if __name__ == '__main__':
     parser.add_argument('--classifier', type=str, help='Classifier xml file',
                         default='../cascades/haarcascade_frontalface_default.xml')
     parser.add_argument('--out', type=str, help='Output file')
-    parser.add_argument('--cfg', type=str, help='cfg file', default='./cfg/yolov3-face.cfg')
-    parser.add_argument('--weights', type=str, help='weights file', default='./model-weights/yolov3-wider_16000.weights')
+    parser.add_argument('--cfg', type=str, help='cfg file', default='./cfg/face-yolov3-tiny.cfg')
+    parser.add_argument('--weights', type=str, help='weights file', default='./model-weights/face-yolov3-tiny_41000.weights')
 
 
     args = parser.parse_args()
@@ -21,10 +21,10 @@ if __name__ == '__main__':
     while True:
         ret, img = cap.read()
         net = process.generate_yolo_net(args.cfg, args.weights)
-        # faces = process.find_faces_yolo(img, net)
+        faces = process.find_faces_yolo(img, net)
 
 
-        faces = process.find_faces_haar(img, args.classifier)
+        # faces = process.find_faces_haar(img, args.classifier)
         blurred_img = process.blur_faces(img, faces)
 
         out = np.hstack((img, blurred_img))
